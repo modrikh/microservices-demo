@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sock-shop-full-stack
+  namespace: monitoring # Le namespace où réside Prometheus
+  labels:
+    release: monitoring
+spec:
+  jobLabel: name
+  selector:
+    matchExpressions:
+      - {key: name, operator: Exists} # Cible front-end, catalogue, carts, user, etc.
+  namespaceSelector:
+    matchNames:
+      - sock-shop
+  endpoints:
+    - port: http # Si le port s'appelle 'http' dans le Service
+      interval: 15s
+    - port: web # Certains services utilisent 'web'
+      interval: 15s
